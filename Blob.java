@@ -29,7 +29,7 @@ public class Blob {
     }
 
     // read the content of the passed file and convert it into an array of bytes
-    private static byte[] convertToByteArray(Path path) throws IOException {
+    public byte[] convertToByteArray(Path path) throws IOException {
         // FileInputStream allows for the reading of binary data by reading data as a
         // stream of bytes
         String filePath = path.toString();
@@ -50,7 +50,7 @@ public class Blob {
     }
 
     // return the SHA1 hash of a byte array
-    public static String generateSHA1(byte[] fileData) throws NoSuchAlgorithmException {
+    public String generateSHA1(byte[] fileData) throws NoSuchAlgorithmException {
         // MessageDigest supports different hash algorithms
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         byte[] hash = md.digest(fileData);
@@ -81,5 +81,9 @@ public class Blob {
         Files.write(objectFilePath, originalFile);
 
         System.out.println("New file created with SHA-1 hash as filename: " + objectFilePath);
+    }
+
+    public Path getPath() {
+        return this.p;
     }
 }
