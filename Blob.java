@@ -28,4 +28,25 @@ public class Blob {
         }
     }
 
+    // read the content of the passed file and convert it into an array of bytes
+    private static byte[] convertToByteArray(Path path) throws IOException {
+        // FileInputStream allows for the reading of binary data by reading data as a
+        // stream of bytes
+        String filePath = path.toString();
+        FileInputStream fis = new FileInputStream(filePath);
+        // output stream used for writing data. Is essentially a byte array. As you
+        // write more data, the buffer can grow dynamically to accommodate the new data.
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+
+        // read the byte, then write the byte to the byte array, close the file input
+        // stream
+        while ((bytesRead = fis.read(buffer)) != -1) {
+            bos.write(buffer, 0, bytesRead);
+        }
+        fis.close();
+        return bos.toByteArray();
+    }
+
 }
