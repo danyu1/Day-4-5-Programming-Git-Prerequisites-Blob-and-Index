@@ -49,4 +49,22 @@ public class Blob {
         return bos.toByteArray();
     }
 
+    // return the SHA1 hash of a byte array
+    public static String generateSHA1(byte[] fileData) throws NoSuchAlgorithmException {
+        // MessageDigest supports different hash algorithms
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        byte[] hash = md.digest(fileData);
+
+        // Convert the byte array to a hexadecimal string
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+
 }
