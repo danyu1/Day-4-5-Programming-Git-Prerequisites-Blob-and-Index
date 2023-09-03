@@ -74,8 +74,6 @@ public class Blob {
         String objectsFolderPath = "objects";
         // New file path
         Path objectFilePath = Paths.get(objectsFolderPath, SHA1);
-        // Create the 'objects' folder if it doesn't exist
-        // Files.createDirectories(objectFilePath.getParent());
 
         // Create a new file with the SHA-1 hash as the filename inside 'objects' folder
         Files.write(objectFilePath, originalFile);
