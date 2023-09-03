@@ -19,4 +19,13 @@ public class Blob {
         this.p = Paths.get(fileName);
     }
 
+    // write given text to the file and path created
+    public void writeToFile(String textToWrite) throws IOException {
+        try {
+            Files.writeString(p, textToWrite, StandardCharsets.ISO_8859_1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
