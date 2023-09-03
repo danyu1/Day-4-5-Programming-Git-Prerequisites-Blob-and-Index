@@ -67,4 +67,19 @@ public class Blob {
         return hexString.toString();
     }
 
+    public void createBlob(String SHA1, Path p) throws IOException {
+        // convert the original file into byte
+        byte[] originalFile = convertToByteArray(p);
+
+        String objectsFolderPath = "objects";
+        // New file path
+        Path objectFilePath = Paths.get(objectsFolderPath, SHA1);
+        // Create the 'objects' folder if it doesn't exist
+        // Files.createDirectories(objectFilePath.getParent());
+
+        // Create a new file with the SHA-1 hash as the filename inside 'objects' folder
+        Files.write(objectFilePath, originalFile);
+
+        System.out.println("New file created with SHA-1 hash as filename: " + objectFilePath);
+    }
 }
