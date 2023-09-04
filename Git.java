@@ -14,17 +14,18 @@ public class Git {
     private int totalBlobs;
     private ArrayList<String> keyValuePairs;
 
+    // initialize private instance variables
+    // New file path to the objects folder
+    // Create the 'objects' folder if it doesn't exist
+    // Create index file
     public Git() throws IOException {
         this.totalBlobs = 0;
         keyValuePairs = new ArrayList<String>();
         String objectsFolderName = "objects";
-        // New file path
         Path objectFolderPath = Paths.get(objectsFolderName);
-        // Create the 'objects' folder if it doesn't exist
         if (!Files.exists(objectFolderPath))
             Files.createDirectories(objectFolderPath);
 
-        // Create index file
         File file = new File("index");
         Path indexFolderPath = Paths.get("index");
         // Create the 'index' file if it doesn't exist
@@ -46,6 +47,7 @@ public class Git {
             if (totalBlobs == 1) {
                 sb.append(keyValuePairs.get(i));
             } else {
+                // makes sure that \n is printed appropriately
                 if (i == 0) {
                     sb.append(keyValuePairs.get(i));
                 } else {
@@ -56,21 +58,21 @@ public class Git {
         Files.writeString(p, sb.toString(), StandardCharsets.ISO_8859_1);
     }
 
+    // create a path to the index file
+    // remove the keyValuePair from the arrayList
+    // create a path to access the sha1 file
+    // delete the sha1 hash file
     public void remove(String fileName) throws NoSuchAlgorithmException, IOException {
         int i = 0;
-        // create a path to the index file
         Path p = Paths.get("index");
         StringBuilder sb = new StringBuilder("");
         boolean removed = false;
         Blob b = new Blob(fileName);
         String currentLine = "";
         String SHA1 = b.generateSHA1(b.convertToByteArray(b.getPath()));
-        // remove this keyValuePair from the arrayList
         String keyValuePair = fileName + " : " + SHA1;
         keyValuePairs.remove(keyValuePair);
-        // create a path to access the sha1 file
         Path sha1Path = Paths.get("objects", SHA1);
-        // delete the sha1 hash file
         Files.delete(sha1Path);
         BufferedReader br = new BufferedReader(new FileReader("index"));
         while (br.ready()) {

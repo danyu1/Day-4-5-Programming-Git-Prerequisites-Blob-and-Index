@@ -29,19 +29,18 @@ public class Blob {
     }
 
     // read the content of the passed file and convert it into an array of bytes
+    // FileInputStream allows for the reading of binary data by reading data as
+    // stream of bytes
+    // output stream used for writing data. Is essentially a byte array. As you
+    // write more data, the buffer can grow dynamically to accommodate the new data.
+    // read the byte, then write the byte to the byte array, close the file input
+    // stream (using a while loop)
     public byte[] convertToByteArray(Path path) throws IOException {
-        // FileInputStream allows for the reading of binary data by reading data as a
-        // stream of bytes
         String filePath = path.toString();
         FileInputStream fis = new FileInputStream(filePath);
-        // output stream used for writing data. Is essentially a byte array. As you
-        // write more data, the buffer can grow dynamically to accommodate the new data.
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
         int bytesRead;
-
-        // read the byte, then write the byte to the byte array, close the file input
-        // stream
         while ((bytesRead = fis.read(buffer)) != -1) {
             bos.write(buffer, 0, bytesRead);
         }
@@ -50,12 +49,11 @@ public class Blob {
     }
 
     // return the SHA1 hash of a byte array
+    // MessageDigest supports different hash algorithms
+    // Convert the byte array to a hexadecimal string
     public String generateSHA1(byte[] fileData) throws NoSuchAlgorithmException {
-        // MessageDigest supports different hash algorithms
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         byte[] hash = md.digest(fileData);
-
-        // Convert the byte array to a hexadecimal string
         StringBuilder hexString = new StringBuilder();
         for (byte b : hash) {
             String hex = Integer.toHexString(0xff & b);
@@ -67,17 +65,14 @@ public class Blob {
         return hexString.toString();
     }
 
+    // convert the original file into byte
+    // New file path that accesses objects folder which can access SHA1 file
+    // Create a new file with the SHA-1 hash as the filename inside 'objects' folder
     public void createBlob(String SHA1, Path p) throws IOException {
-        // convert the original file into byte
         byte[] originalFile = convertToByteArray(p);
-
         String objectsFolderPath = "objects";
-        // New file path
         Path objectFilePath = Paths.get(objectsFolderPath, SHA1);
-
-        // Create a new file with the SHA-1 hash as the filename inside 'objects' folder
         Files.write(objectFilePath, originalFile);
-
         System.out.println("New file created with SHA-1 hash as filename: " + objectFilePath);
     }
 
