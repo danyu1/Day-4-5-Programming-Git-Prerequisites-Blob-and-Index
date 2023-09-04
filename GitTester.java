@@ -7,5 +7,6 @@ public class GitTester {
         init.add("test.txt");
         init.add("test2.txt");
         init.add("test3.txt");
+        init.remove("test2.txt");
     }
 }

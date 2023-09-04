@@ -57,24 +57,45 @@ public class Git {
     }
 
     public void remove(String fileName) throws NoSuchAlgorithmException, IOException {
+        int i = 0;
+        // create a path to the index file
+        Path p = Paths.get("index");
+        StringBuilder sb = new StringBuilder("");
         boolean removed = false;
         Blob b = new Blob(fileName);
         String currentLine = "";
         String SHA1 = b.generateSHA1(b.convertToByteArray(b.getPath()));
+        // remove this keyValuePair from the arrayList
         String keyValuePair = fileName + " : " + SHA1;
-        Files.delete(b.getPath());
-        BufferedReader br = new BufferedReader(new FileReader(fileName));
-        PrintWriter pw = new PrintWriter("index");
+        keyValuePairs.remove(keyValuePair);
+        // create a path to access the sha1 file
+        Path sha1Path = Paths.get("objects", SHA1);
+        // delete the sha1 hash file
+        Files.delete(sha1Path);
+        BufferedReader br = new BufferedReader(new FileReader("index"));
         while (br.ready()) {
             currentLine = br.readLine();
+            // if the currentline that is read not equal to the key value pair you want to
+            // remove then append it to the stringbuilder
             if (!currentLine.equals(keyValuePair)) {
-                pw.print(currentLine);
-                pw.flush();
+                if (totalBlobs == 1) {
+                    sb.append(currentLine);
+                } else {
+                    if (i == 0) {
+                        sb.append(currentLine);
+                        i++;
+                    } else {
+                        sb.append("\n" + currentLine);
+                        i++;
+                    }
+                }
             } else {
                 removed = true;
+                totalBlobs--;
             }
         }
         if (removed) {
+            Files.writeString(p, sb.toString(), StandardCharsets.ISO_8859_1);
             System.out.println("Succesfully removed blob.");
         } else {
             System.out.println("Blob not found.");
