@@ -72,8 +72,8 @@ public class Git {
         String SHA1 = b.generateSHA1(b.convertToByteArray(b.getPath()));
         String keyValuePair = fileName + " : " + SHA1;
         keyValuePairs.remove(keyValuePair);
-        Path sha1Path = Paths.get("objects", SHA1);
-        Files.delete(sha1Path);
+        // Path sha1Path = Paths.get("objects", SHA1);
+        // Files.delete(sha1Path);
         BufferedReader br = new BufferedReader(new FileReader("index"));
         while (br.ready()) {
             currentLine = br.readLine();
