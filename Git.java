@@ -36,26 +36,28 @@ public class Git {
     // creates a sha1 hash of the passed file and updates the index file to record
     // appropriate key:value pair
     public void add(String fileName) throws NoSuchAlgorithmException, IOException {
-        StringBuilder sb = new StringBuilder("");
         Path p = Paths.get("index");
         Blob b = new Blob(fileName);
         String SHA1 = b.generateSHA1(b.convertToByteArray(b.getPath()));
-        b.createBlob(SHA1, b.getPath());
-        keyValuePairs.add(fileName + " : " + SHA1);
-        totalBlobs++;
-        for (int i = 0; i < keyValuePairs.size(); i++) {
-            if (totalBlobs == 1) {
-                sb.append(keyValuePairs.get(i));
-            } else {
-                // makes sure that \n is printed appropriately
-                if (i == 0) {
+        if (!keyValuePairs.contains(fileName + " : " + SHA1)) {
+            StringBuilder sb = new StringBuilder("");
+            b.createBlob(SHA1, b.getPath());
+            keyValuePairs.add(fileName + " : " + SHA1);
+            totalBlobs++;
+            for (int i = 0; i < keyValuePairs.size(); i++) {
+                if (totalBlobs == 1) {
                     sb.append(keyValuePairs.get(i));
                 } else {
-                    sb.append("\n" + keyValuePairs.get(i));
+                    // makes sure that \n is printed appropriately
+                    if (i == 0) {
+                        sb.append(keyValuePairs.get(i));
+                    } else {
+                        sb.append("\n" + keyValuePairs.get(i));
+                    }
                 }
             }
+            Files.writeString(p, sb.toString(), StandardCharsets.ISO_8859_1);
         }
-        Files.writeString(p, sb.toString(), StandardCharsets.ISO_8859_1);
     }
 
     // create a path to the index file
